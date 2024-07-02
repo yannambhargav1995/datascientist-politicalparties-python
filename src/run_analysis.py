@@ -4,7 +4,7 @@ from matplotlib import pyplot
 
 from political_party_analysis.loader import DataLoader
 from political_party_analysis.visualization import scatter_plot
-
+# comment
 if __name__ == "__main__":
 
     data_loader = DataLoader()
