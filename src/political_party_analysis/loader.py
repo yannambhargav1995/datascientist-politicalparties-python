@@ -24,28 +24,39 @@ class DataLoader:
 
     def remove_duplicates(self, df: pd.DataFrame) -> pd.DataFrame:
         """Write a function to remove duplicates in a dataframe"""
-        ##### YOUR CODE GOES HERE #####
-        pass
+        return df.drop_duplicates()
 
     def remove_nonfeature_cols(
         self, df: pd.DataFrame, non_features: List[str], index: List[str]
     ) -> pd.DataFrame:
         """Write a function to remove certain features cols and set certain cols as indices
         in a dataframe"""
-        ##### YOUR CODE GOES HERE #####
-        pass
+        df = df.drop(columns=non_features)
+        df.set_index(index)
+        return df
 
     def handle_NaN_values(self, df: pd.DataFrame) -> pd.DataFrame:
         """Write a function to handle NaN values in a dataframe"""
         ##### YOUR CODE GOES HERE #####
-        pass
+        from sklearn.impute import SimpleImputer
+        simple_impute = SimpleImputer(strategy='median')
+        df_imputed = simple_impute.fit_transform(df)
+        return pd.DataFrame(df_imputed, columns=df.columns)
 
     def scale_features(self, df: pd.DataFrame) -> pd.DataFrame:
         """Write a function to normalise values in a dataframe. Use StandardScaler."""
         ##### YOUR CODE GOES HERE #####
-        pass
+        from sklearn.preprocessing import StandardScaler
+        scaler = StandardScaler()
+        df_scaled = scaler.fit_transform(df)
+        return pd.DataFrame(df_scaled,columns=df.columns)
+
 
     def preprocess_data(self):
         """Write a function to combine all pre-processing steps for the dataset"""
-        ##### YOUR CODE GOES HERE #####
-        pass
+        self.party_data = self.remove_duplicates(self.party_data)
+        self.party_data = self.remove_nonfeature_cols(self.party_data,non_features=['eu_econ_require','eu_political_require','eu_googov_require','party','eu_foreign','eu_intmark','eu_budgets','eu_asylum','immigrate_policy','civlib_laworder','country'],index=['party_id'])
+        self.party_data = self.handle_NaN_values(self.party_data)
+        self.party_data = self.scale_features(self.party_data)
+        return self.party_data
+
